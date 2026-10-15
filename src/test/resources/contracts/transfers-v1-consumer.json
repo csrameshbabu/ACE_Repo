@@ -1,0 +1,22 @@
+{
+  "consumer": "mobile-banking-channel",
+  "provider": "synthetic-transfer-api",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/transfers",
+    "contentType": "application/json",
+    "body": {
+      "fromAccount": "SYN-CHK-001",
+      "beneficiaryId": "SYN-BEN-001",
+      "amount": 25.50,
+      "currency": "USD",
+      "idempotencyKey": "consumer-contract-transfer-001"
+    }
+  },
+  "response": {
+    "status": 202,
+    "contentType": "application/json",
+    "requiredFields": ["transferId", "status", "amount", "currency"],
+    "statusValue": "ACCEPTED"
+  }
+}

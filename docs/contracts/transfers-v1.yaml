@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: Synthetic Banking Transfer API
+  version: 1.0.0
+  description: Demonstration contract only. It never connects to a real banking ledger.
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/v1/transfers:
+    post:
+      operationId: createSyntheticTransfer
+      summary: Submit a transfer in the isolated synthetic ledger
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+          description: Must match the idempotencyKey body field in this demonstration API.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '202':
+          description: Transfer accepted by the synthetic ledger
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+        '400':
+          description: Invalid request or unsupported synthetic scenario
+        '409':
+          description: Idempotency conflict or insufficient synthetic balance
+components:
+  schemas:
+    TransferRequest:
+      type: object
+      required: [fromAccount, beneficiaryId, amount, currency, idempotencyKey]
+      properties:
+        fromAccount:
+          type: string
+          example: SYN-CHK-001
+        beneficiaryId:
+          type: string
+          example: SYN-BEN-001
+        amount:
+          type: number
+          minimum: 0.01
+          multipleOf: 0.01
+          example: 25.50
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          example: USD
+        idempotencyKey:
+          type: string
+          minLength: 1
+          example: synthetic-payment-001
+    TransferResponse:
+      type: object
+      required: [transferId, status, amount, currency]
+      properties:
+        transferId:
+          type: string
+        status:
+          type: string
+          enum: [ACCEPTED]
+        amount:
+          type: number
+        currency:
+          type: string

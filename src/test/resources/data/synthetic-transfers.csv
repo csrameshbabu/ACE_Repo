@@ -1,0 +1,4 @@
+transfer_id,idempotency_key,request_fingerprint,amount,balance_after
+SYN-TR-001,SYN-KEY-001,SYN-FP-001,25.50,2474.50
+SYN-TR-002,SYN-KEY-002,SYN-FP-002,10.00,2464.50
+SYN-TR-003,SYN-KEY-003,SYN-FP-003,5.00,2459.50

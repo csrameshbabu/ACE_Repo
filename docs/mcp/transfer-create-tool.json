@@ -1,0 +1,60 @@
+{
+  "name": "transfer.create",
+  "version": "1.0.0",
+  "description": "Validate a transfer request in the synthetic banking environment. This example does not execute a real payment.",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "sourceAccountToken",
+      "beneficiaryToken",
+      "amount",
+      "currency",
+      "idempotencyKey"
+    ],
+    "properties": {
+      "sourceAccountToken": {
+        "type": "string",
+        "pattern": "^SYN-"
+      },
+      "beneficiaryToken": {
+        "type": "string",
+        "pattern": "^SYN-"
+      },
+      "amount": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "currency": {
+        "type": "string",
+        "const": "USD"
+      },
+      "idempotencyKey": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "authorization": {
+    "agentAuthority": "payments:write",
+    "humanApprovalRequired": true,
+    "humanApprovalAuthority": "payments:approve",
+    "separationOfDuties": "approver subject must differ from agent subject"
+  },
+  "audit": {
+    "requiredFields": [
+      "requestId",
+      "toolName",
+      "actorSubject",
+      "outcome",
+      "approvalReference",
+      "occurredAt"
+    ],
+    "sensitiveValues": "Do not record full account numbers, credentials, OTP values, or customer personal data."
+  },
+  "failureModes": [
+    "invalid_arguments",
+    "unauthorized_agent",
+    "missing_or_invalid_human_approval"
+  ]
+}

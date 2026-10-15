@@ -1,0 +1,23 @@
+# Maven build output
+target/
+
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+
+# IDE and operating-system files
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local run output
+*.log
+reports/
