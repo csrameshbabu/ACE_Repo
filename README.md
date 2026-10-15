@@ -59,13 +59,21 @@ The revised evaluation identified missing architecture views, end-to-end traceab
 | RACI, approvals, retention, exception and risk records | [`docs/governance-pack.md`](docs/governance-pack.md) |
 | ADRs, 30/60/90-day plan, cost assumptions and value targets | [`docs/roadmap-and-value.md`](docs/roadmap-and-value.md) |
 
-The GitHub Actions workflow runs the deterministic Maven suite on pushes and pull requests, uploads Surefire reports and a run/dataset-hash manifest, and offers an opt-in k6 job from **Actions → ACE Quality Evidence → Run workflow → Run the two-minute synthetic k6 workload**. These jobs produce evidence only after the workflow is enabled and executed in a GitHub repository. They do not claim that a mobile device farm, Kubernetes, a production-scale model, an OTLP collector, or a security scanner has already been deployed. Thresholds and savings in the roadmap are planning targets until measured against an agreed baseline.
+The GitHub Actions workflow runs the deterministic Maven suite on pushes to `main` or `master` and on pull requests. It uploads Surefire reports, documentation, test resources, the k6 script, the Maven project file, and a run/dataset-hash manifest. Java implementation and test source files, and the workflow YAML itself, remain in the repository and are not included in the downloaded artifact. An opt-in k6 job is available from **Actions > ACE Quality Evidence > Run workflow**; select **Run the two-minute synthetic k6 workload** before starting it.
+
+### Observed CI evidence
+
+The downloaded artifact for [workflow run 38730125370](https://github.com/csrameshbabu/ACE_Repo/actions/runs/38730125370) records commit `372d1698947b17c5f6892202a5c64c62a9805368`, event `push`, and 13 tests across seven Surefire reports: 0 failures, 0 errors, and 0 skipped. The four synthetic/AI dataset hashes in the manifest matched the files in that artifact. This describes the reports in that run; it does not establish results for k6, mobile-device, security-scan, recovery, or live-model evaluation.
+
+When downloading an artifact, extract it outside the repository or add its folder pattern (for example, `ace-quality-evidence-*/`) to `.gitignore`. An extracted artifact inside the project appears as untracked content and should not be committed as source.
+
+The workflow only produces evidence after it has run in GitHub Actions. It does not claim that a mobile device farm, Kubernetes, a production-scale model, an OTLP collector, or a security scanner has been deployed. Thresholds and savings in the roadmap remain planning targets until measured against an agreed baseline.
 
 ## Important scope notes
 
 - The consumer/provider contract is represented as a consumer expectation JSON file plus a provider OpenAPI contract and a Spring `MockMvc` verification. This is contract-style test evidence, not a Pact broker integration.
 - The mobile document is a concrete Appium 2 journey/device test design; it is not wired to a physical device farm.
-- For a local k6 run, install k6 separately and start the sample API; the optional hosted workflow installs k6 and starts a fresh isolated sample API for you.
+- For a local k6 run, install k6 separately and start the sample API; the optional hosted workflow installs k6 and starts a fresh isolated sample API for you. A push-triggered CI run does not run k6.
 - OpenTelemetry exports to a logging exporter for local demonstration. Production deployment requires an authenticated OTLP collector and approved retention/redaction settings.
 - AI dataset/rubric tests validate the evidence artifacts. No external model or live LLM judge is invoked by `mvn test`.
 - MCP authorization/audit is an executable policy example using in-memory audit events. Production must connect identity, approval verification, and durable audit storage to governed services.
