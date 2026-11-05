@@ -2,7 +2,159 @@
 
 Java 17 reference project for the capstone's technical-evidence checklist. It includes a runnable Spring Boot API and automated tests, plus portable artifacts for mobile, performance, AI/RAG, MCP governance, OpenTelemetry, and synthetic-data assurance.
 
-All payment examples are isolated and synthetic. The transfer API uses an in-memory demonstration ledger; it is not connected to a real bank, payment rail, authentication service, or customer data.
+All payment examples are isolated and synthetic. The transfer API uses an
+in-memory reference ledger; it is not connected to a real bank, payment rail,
+authentication service, or customer data.
+
+## Architecture walkthrough
+
+Use this sequence to explain the architecture, folder structure, API behavior,
+quality evidence, and implementation boundaries.
+
+### 1. Explain the architecture
+
+Open [`docs/architecture-views.md`](docs/architecture-views.md) and explain:
+
+- **System context:** customers and operations use web/mobile channels or the
+  AI assistant; requests pass through governed API or tool boundaries.
+- **Containers and trust boundaries:** clients cannot connect directly to
+  banking data or tools. Authentication, schema validation, approval, audit,
+  and telemetry controls sit at the appropriate boundary.
+- **Transfer sequence:** a test run sends a synthetic transfer with an
+  idempotency key and trace context. The API validates it, updates the
+  reference ledger, and returns a traceable result.
+- **Deployment view:** CI runs deterministic checks and publishes evidence;
+  isolated environments and controlled release automation are production
+  design requirements.
+
+Use [`docs/architecture-pack.md`](docs/architecture-pack.md) to explain the
+quality layers, mandatory release controls, and AI governance principles.
+
+### 2. Explain the folder structure
+
+```text
+ACE/
+├── pom.xml                         # Java 17 and Spring Boot build
+├── README.md                       # Instructions and evidence map
+├── capstone_requirements_and_plan.md
+├── docs/
+│   ├── architecture-*.md           # Context, flows, boundaries, deployment
+│   ├── contracts/                  # Provider API contract
+│   ├── mcp/                        # Governed tool contract
+│   └── ...                         # Risk, NFR, AI, telemetry, governance
+├── src/
+│   ├── main/java/com/ace/banking/
+│   │   ├── api/                   # HTTP endpoint, DTOs, error handling
+│   │   ├── service/               # Transfer and assurance business logic
+│   │   ├── agent/                 # Principal, approval, tool, audit types
+│   │   ├── data/                  # Synthetic data and anomaly detection
+│   │   ├── observability/          # Trace propagation and OTel setup
+│   │   └── model/                 # Quality and governance domain models
+│   └── test/
+│       ├── java/                  # Unit, API, contract, AI, governance tests
+│       └── resources/             # Datasets, rubrics, and contracts
+├── scripts/                       # Evidence-manifest generation
+├── tests/performance/             # Optional k6 workload
+└── .github/workflows/             # CI quality-evidence workflow
+```
+
+Dependency direction:
+
+```text
+HTTP request -> api -> service -> model/data
+                         |-> agent policy and audit
+                         |-> observability
+tests/resources -> tests -> target reports -> evidence manifest
+```
+
+`target/` is generated output and should not be treated as source. Extract
+downloaded CI evidence outside the repository.
+
+### 3. Run the architecture summary
+
+From the repository root in PowerShell:
+
+```powershell
+mvn --% exec:java -Dexec.mainClass=com.ace.banking.DigitalBankingQualityApplication
+```
+
+Point out the printed quality layers, critical scenarios, mandatory release
+gates, AI assurance checks, and payment risk owners.
+
+### 4. Run and exercise the API
+
+Start the API in a separate PowerShell terminal:
+
+```powershell
+mvn --% spring-boot:run -Dspring-boot.run.main-class=com.ace.banking.BankingApiApplication
+```
+
+In another terminal, submit the documented synthetic transfer:
+
+```powershell
+Invoke-RestMethod -Method Post -Uri http://localhost:8080/api/v1/transfers `
+  -Headers @{ "Idempotency-Key" = "manual-synthetic-001" } `
+  -ContentType "application/json" `
+  -Body '{"fromAccount":"SYN-CHK-001","beneficiaryId":"SYN-BEN-001","amount":25.50,"currency":"USD","idempotencyKey":"manual-synthetic-001"}'
+```
+
+Explain the request and response:
+
+- `Idempotency-Key` must match the request body.
+- Only the documented synthetic account, beneficiary, and USD scenario are
+  enabled.
+- A repeated request with the same key returns the original transfer.
+- Reusing the key with different transfer details is rejected.
+- The service starts with a synthetic balance of USD 2,500.00 and keeps state
+  in memory for the running process.
+
+The API is intentionally a small reference implementation of the transfer
+control path, not a production ledger implementation.
+
+### 5. Run the evidence suite
+
+Run all unit, API, contract, and artifact validation tests:
+
+```powershell
+mvn test
+```
+
+The tests cover API/contract behavior, AI golden data, MCP transfer-tool
+governance, synthetic-data anomaly rules, quality architecture, and release
+governance.
+
+After the tests complete, create and inspect the local evidence manifest:
+
+```powershell
+python scripts/build_evidence_manifest.py
+Get-Content target/evidence-manifest.json
+```
+
+The manifest records test totals, tool versions, environment information, and
+SHA-256 hashes for the AI and synthetic-data resources.
+
+### 6. Use the evidence map
+
+| Question | Open this file or folder |
+| --- | --- |
+| Where is the target architecture? | [`docs/architecture-views.md`](docs/architecture-views.md) |
+| Where are quality layers and release gates defined? | [`docs/architecture-pack.md`](docs/architecture-pack.md) |
+| Where is the API contract? | [`docs/contracts/transfers-v1.yaml`](docs/contracts/transfers-v1.yaml) |
+| Where is the governed MCP tool? | [`docs/mcp/transfer-create-tool.json`](docs/mcp/transfer-create-tool.json) |
+| Where is trace correlation described? | [`docs/opentelemetry-trace-correlation.md`](docs/opentelemetry-trace-correlation.md) |
+| Where are AI datasets and rubric checks? | `src/test/resources/ai/` |
+| Where are synthetic data and anomaly checks? | `src/test/resources/data/` and `src/main/java/com/ace/banking/data/` |
+| Where is CI evidence published? | `.github/workflows/quality-evidence.yml` |
+
+### 7. State the implementation boundaries
+
+- `mvn test` verifies the deterministic local project and its evidence
+  artifacts.
+- The local OpenTelemetry setup uses a logging exporter.
+- The mobile journey, k6 workload, production identity, approval service,
+  durable audit store, cloud deployment, and live model evaluation require
+  separate platform execution before production use.
+- All payment examples and datasets in this repository are synthetic.
 
 ## Run and verify
 
@@ -12,7 +164,7 @@ Run all unit, API, contract, and artifact validation tests:
 mvn test
 ```
 
-Run the architecture summary console demo:
+Run the architecture summary console application:
 
 ```powershell
 mvn --% exec:java -Dexec.mainClass=com.ace.banking.DigitalBankingQualityApplication
@@ -74,6 +226,6 @@ The workflow only produces evidence after it has run in GitHub Actions. It does 
 - The consumer/provider contract is represented as a consumer expectation JSON file plus a provider OpenAPI contract and a Spring `MockMvc` verification. This is contract-style test evidence, not a Pact broker integration.
 - The mobile document is a concrete Appium 2 journey/device test design; it is not wired to a physical device farm.
 - For a local k6 run, install k6 separately and start the sample API; the optional hosted workflow installs k6 and starts a fresh isolated sample API for you. A push-triggered CI run does not run k6.
-- OpenTelemetry exports to a logging exporter for local demonstration. Production deployment requires an authenticated OTLP collector and approved retention/redaction settings.
+- OpenTelemetry exports to a logging exporter for local reference use. Production deployment requires an authenticated OTLP collector and approved retention/redaction settings.
 - AI dataset/rubric tests validate the evidence artifacts. No external model or live LLM judge is invoked by `mvn test`.
 - MCP authorization/audit is an executable policy example using in-memory audit events. Production must connect identity, approval verification, and durable audit storage to governed services.
