@@ -1,0 +1,34 @@
+{
+  "name": "ace-quality-marketplace",
+  "metadata": {
+    "description": "Private marketplace for ACE Copilot plugins.",
+    "version": "1.0.0"
+  },
+  "owner": {
+    "name": "CSRameshbabu",
+    "url": "https://github.com/csrameshbabu"
+  },
+  "plugins": [
+    {
+      "name": "ace-digital-banking-quality",
+      "description": "Quality engineering and AI assurance workflows for the ACE synthetic digital-banking reference project.",
+      "version": "1.0.0",
+      "author": {
+        "name": "CSRameshbabu",
+        "url": "https://github.com/csrameshbabu"
+      },
+      "repository": "https://github.com/csrameshbabu/ACE_Repo",
+      "homepage": "https://github.com/csrameshbabu/ACE_Repo",
+      "license": "MIT",
+      "keywords": [
+        "banking",
+        "quality-engineering",
+        "ai-assurance",
+        "java",
+        "spring-boot",
+        "testing"
+      ],
+      "source": "."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ace-digital-banking-quality",
+  "version": "1.0.0",
+  "description": "Quality engineering and AI assurance workflows for the ACE synthetic digital-banking reference project.",
+  "author": {
+    "name": "CSRameshbabu",
+    "url": "https://github.com/csrameshbabu"
+  },
+  "homepage": "https://github.com/csrameshbabu/ACE_Repo",
+  "repository": "https://github.com/csrameshbabu/ACE_Repo",
+  "license": "MIT",
+  "keywords": [
+    "banking",
+    "quality-engineering",
+    "ai-assurance",
+    "java",
+    "spring-boot",
+    "testing"
+  ]
+}

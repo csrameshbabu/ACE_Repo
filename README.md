@@ -111,6 +111,26 @@ Explain the request and response:
 The API is intentionally a small reference implementation of the transfer
 control path, not a production ledger implementation.
 
+## Use as a VS Code Agent Plugin
+
+This repository is also an Agent Plugins 1.0 package for the Copilot harness.
+It provides the **ACE Quality Engineer** agent and the
+`quality-evidence-review` skill.
+
+To install it directly from Git in VS Code:
+
+1. Open **Chat: Open Customizations** from the Command Palette.
+2. Open **Plugins**, select the `+` button next to **User** or **Workspace**,
+   and choose **Install Plugin from Source**.
+3. Enter `https://github.com/csrameshbabu/ACE_Repo`.
+4. Start a new Copilot chat, select **ACE Quality Engineer**, and try a request
+   such as `Review the transfer authorization evidence`.
+
+The Git source is installed as an agent plugin; it is not a traditional
+VS Code extension and does not require the VS Code Extension Marketplace.
+Review the plugin files before trusting or installing them. The plugin
+intentionally operates only on the synthetic reference project.
+
 ### 5. Run the evidence suite
 
 Run all unit, API, contract, and artifact validation tests:

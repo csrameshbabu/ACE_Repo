@@ -1,0 +1,31 @@
+{
+  "datasetId": "ace-synthetic-banking-core",
+  "version": "1.0.0",
+  "classification": "synthetic-only",
+  "generator": "ACE deterministic fixture set",
+  "seed": 42042,
+  "productionDataUsed": false,
+  "personalDataPresent": false,
+  "entities": {
+    "customers": 3,
+    "accounts": 3,
+    "beneficiaries": 2,
+    "transfers": 4,
+    "reversals": 1
+  },
+  "invariants": [
+    "all identifiers begin with SYN-",
+    "all account balances are non-negative",
+    "every transfer has a unique idempotency key unless explicitly testing a replay",
+    "currency is USD for this bounded demo dataset",
+    "no real names, addresses, phone numbers, emails, or account numbers are used"
+  ],
+  "scenarios": [
+    "beneficiary-pending-to-active",
+    "transfer-success",
+    "idempotent-replay",
+    "duplicate-key-payload-conflict",
+    "insufficient-funds",
+    "transfer-reversal"
+  ]
+}
