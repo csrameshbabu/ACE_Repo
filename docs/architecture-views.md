@@ -96,7 +96,7 @@ The evidence join key is `trace_id` plus `test_run_id`, `test_case_id`, `release
 ```mermaid
 flowchart LR
   subgraph Build[Build and test plane]
-    SRC[Source and pull request] --> CI[CI runner: JDK 17, Maven]
+    SRC[Source and pull request] --> CI[CI runner: JDK 25, Maven]
     CI --> TEST[Unit, API, contract, artifact tests]
     CI --> PKG[Evidence bundle and checksums]
   end

@@ -15,7 +15,7 @@
     <version>1.0.0</version>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>25</java.version>
         <opentelemetry.version>1.43.0</opentelemetry.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

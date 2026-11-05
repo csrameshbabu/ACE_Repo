@@ -1,6 +1,6 @@
 # Digital Banking Quality Architecture (Java)
 
-Java 17 reference project for the capstone's technical-evidence checklist. It includes a runnable Spring Boot API and automated tests, plus portable artifacts for mobile, performance, AI/RAG, MCP governance, OpenTelemetry, and synthetic-data assurance.
+Java 25 reference project for the capstone's technical-evidence checklist. It includes a runnable Spring Boot API and automated tests, plus portable artifacts for mobile, performance, AI/RAG, MCP governance, OpenTelemetry, and synthetic-data assurance.
 
 All payment examples are isolated and synthetic. The transfer API uses an
 in-memory reference ledger; it is not connected to a real bank, payment rail,
@@ -34,7 +34,7 @@ quality layers, mandatory release controls, and AI governance principles.
 
 ```text
 ACE/
-├── pom.xml                         # Java 17 and Spring Boot build
+├── pom.xml                         # Java 25 and Spring Boot build
 ├── README.md                       # Instructions and evidence map
 ├── capstone_requirements_and_plan.md
 ├── docs/
@@ -130,6 +130,24 @@ The Git source is installed as an agent plugin; it is not a traditional
 VS Code extension and does not require the VS Code Extension Marketplace.
 Review the plugin files before trusting or installing them. The plugin
 intentionally operates only on the synthetic reference project.
+
+#### Install from the VS Code Marketplace
+
+If this plugin is published to the VS Code Marketplace:
+
+1. Open **Extensions: Marketplace** from the Command Palette or select the
+   Extensions icon in VS Code.
+2. Search for **ACE Digital Banking Quality**.
+3. Select the publisher's listing and choose **Install**.
+4. Open **Chat: Open Customizations**, select **Plugins**, and confirm that
+   the ACE plugin is enabled for the current user or workspace.
+5. Start a new Copilot chat, select **ACE Quality Engineer**, and try a
+   request such as `Review the transfer authorization evidence`.
+
+The current repository is distributed as an Agent Plugins 1.0 package and is
+installed from Git using the instructions above. It is not currently a
+traditional VS Code Marketplace extension. Verify the publisher and review
+the plugin files before installing any marketplace listing.
 
 ### 5. Run the evidence suite
 
